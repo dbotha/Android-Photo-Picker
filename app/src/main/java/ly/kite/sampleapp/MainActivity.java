@@ -32,10 +32,7 @@ public class MainActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CODE_PHOTO_PICKER) {
             if (resultCode == Activity.RESULT_OK) {
-                Parcelable[] parcelables = data.getParcelableArrayExtra(PhotoPicker.EXTRA_SELECTED_PHOTOS);
-                Photo[] photos = new Photo[parcelables.length];
-                System.arraycopy(photos, 0, photos, 0, parcelables.length);
-
+                Photo[] photos = PhotoPicker.getResultPhotos(data);
                 Toast.makeText(this, "User selected " + photos.length + " photos", Toast.LENGTH_SHORT).show();
             } else if (resultCode == Activity.RESULT_CANCELED) {
                 Toast.makeText(this, "Photo Picking Cancelled", Toast.LENGTH_SHORT).show();

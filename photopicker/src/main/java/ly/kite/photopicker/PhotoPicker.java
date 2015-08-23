@@ -2,6 +2,7 @@ package ly.kite.photopicker;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Parcelable;
 
 /**
  * Created by deon on 23/08/15.
@@ -12,5 +13,12 @@ public class PhotoPicker {
     public static void startPhotoPickerForResult(Activity activity, int requestCode) {
         Intent i = new Intent(activity, DeviceFolderActivity.class);
         activity.startActivityForResult(i, requestCode);
+    }
+
+    public static Photo[] getResultPhotos(Intent data) {
+        Parcelable[] parcelables = data.getParcelableArrayExtra(PhotoPicker.EXTRA_SELECTED_PHOTOS);
+        Photo[] photos = new Photo[parcelables.length];
+        System.arraycopy(photos, 0, photos, 0, parcelables.length);
+        return photos;
     }
 }
