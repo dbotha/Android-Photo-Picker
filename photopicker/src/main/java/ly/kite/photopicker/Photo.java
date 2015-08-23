@@ -1,10 +1,8 @@
-package kite.ly.photopicker;
+package ly.kite.photopicker;
 
 import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
-
-import java.net.URL;
 
 /**
  * Created by deon on 23/08/15.

@@ -1,4 +1,4 @@
-package kite.ly.photopicker;
+package ly.kite.photopicker;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

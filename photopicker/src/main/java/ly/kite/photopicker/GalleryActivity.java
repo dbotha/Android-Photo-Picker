@@ -1,4 +1,4 @@
-package kite.ly.photopicker;
+package ly.kite.photopicker;
 
 import android.app.Activity;
 import android.app.LoaderManager;
@@ -11,7 +11,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -23,12 +22,10 @@ import android.widget.AdapterView;
 import android.widget.CursorAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
-import java.util.HashSet;
 
 
 public class GalleryActivity extends Activity implements LoaderManager.LoaderCallbacks<Cursor> {

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="kite.ly.photopicker" >
+    package="ly.kite.photopicker" >
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
@@ -8,14 +8,14 @@
         android:allowBackup="true"
         android:label="@string/app_name" >
         <activity
-            android:name=".DeviceFolderActivity"
+            android:name="ly.kite.photopicker.DeviceFolderActivity"
             android:label="@string/title_activity_device_folder"
             android:theme="@style/Theme.PhotoPicker"
             >
         </activity>
 
         <activity
-            android:name=".GalleryActivity"
+            android:name="ly.kite.photopicker.GalleryActivity"
             android:label="@string/title_activity_gallery"
             android:theme="@style/Theme.PhotoPicker"
             >

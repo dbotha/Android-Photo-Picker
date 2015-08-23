@@ -4,7 +4,7 @@
     android:paddingRight="0dp"
     android:paddingTop="0dp"
     android:paddingBottom="0dp"
-    tools:context="kite.ly.photopicker.DeviceFolderActivity">
+    tools:context="ly.kite.photopicker.DeviceFolderActivity">
 
     <GridView
         android:id="@+id/gridview"

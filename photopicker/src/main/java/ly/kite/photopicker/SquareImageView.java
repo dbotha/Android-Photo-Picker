@@ -1,4 +1,4 @@
-package kite.ly.photopicker;
+package ly.kite.photopicker;
 
 import android.content.Context;
 import android.util.AttributeSet;
