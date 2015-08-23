@@ -50,7 +50,7 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     if (requestCode == REQUEST_CODE_PHOTO_PICKER) {
             if (resultCode == Activity.RESULT_OK) {
                 Parcelable[] parcelables = data.getParcelableArrayExtra(PhotoPicker.EXTRA_SELECTED_PHOTOS);
-                PhotoPicker[] photos = new PhotoPicker[parcelables.length];
+                Photo[] photos = new Photo[parcelables.length];
                 System.arraycopy(photos, 0, photos, 0, parcelables.length);
 
                 Toast.makeText(this, "User selected " + photos.length + " photos", Toast.LENGTH_SHORT).show();
