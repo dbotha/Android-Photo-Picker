@@ -4,16 +4,22 @@ import android.app.Activity;
 import android.app.LoaderManager;
 import android.content.Context;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.provider.MediaStore;
+import android.util.Log;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.CursorAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -21,11 +27,16 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.HashMap;
+import java.util.HashSet;
+
 
 public class GalleryActivity extends Activity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     public static final String EXTRA_MEDIA_BUCKET_ID = "ly.kite.photopicker.EXTRA_MEDIA_BUCKET_ID";
     public static final String EXTRA_MEDIA_BUCKET_NAME = "ly.kite.photopicker.EXTRA_MEDIA_BUCKET_NAME";
+
+    private static final String KEY_SELECTED_PHOTOS = "ly.kite.photopicker.KEY_SELECTED_PHOTOS";
 
     // These are the Contacts rows that we will retrieve.
     static final String[] GALLERY_PROJECTION = new String[] {
@@ -34,6 +45,7 @@ public class GalleryActivity extends Activity implements LoaderManager.LoaderCal
             MediaStore.Images.Media.DATE_TAKEN
     };
 
+    private final HashMap<Integer, Photo> selectedPhotos = new HashMap<>();
     private GridView gridView;
     private GalleryCursorAdapter adapter;
     private String mediaBucketId;
@@ -43,12 +55,30 @@ public class GalleryActivity extends Activity implements LoaderManager.LoaderCal
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gallery);
 
-        this.gridView = (GridView) findViewById(R.id.gridview);
-        adapter = new GalleryCursorAdapter();
-        gridView.setAdapter(adapter);
+        if (savedInstanceState != null) {
+            Parcelable[] selected = savedInstanceState.getParcelableArray(KEY_SELECTED_PHOTOS);
+            for (Parcelable parcelable : selected) {
+                Photo photo = (Photo) parcelable;
+                selectedPhotos.put(photo.getId(), photo);
+            }
+        }
 
         this.mediaBucketId = getIntent().getStringExtra(EXTRA_MEDIA_BUCKET_ID);
         setTitle(getIntent().getStringExtra(EXTRA_MEDIA_BUCKET_NAME));
+
+        this.gridView = (GridView) findViewById(R.id.gridview);
+        adapter = new GalleryCursorAdapter();
+        gridView.setAdapter(adapter);
+        gridView.setChoiceMode(GridView.CHOICE_MODE_MULTIPLE_MODAL);
+        gridView.setMultiChoiceModeListener(new MultiChoiceModeListener());
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                boolean checked = gridView.isItemChecked(position);
+                gridView.setItemChecked(position, !checked);
+            }
+        });
+
         getLoaderManager().initLoader(0, null, this);
     }
 
@@ -57,6 +87,7 @@ public class GalleryActivity extends Activity implements LoaderManager.LoaderCal
         super.onSaveInstanceState(outState);
         outState.putString(EXTRA_MEDIA_BUCKET_ID, mediaBucketId);
         outState.putString(EXTRA_MEDIA_BUCKET_NAME, getTitle().toString());
+        outState.putParcelableArray(KEY_SELECTED_PHOTOS, selectedPhotos.values().toArray(new Photo[0]));
     }
 
     @Override
@@ -134,19 +165,75 @@ public class GalleryActivity extends Activity implements LoaderManager.LoaderCal
         public void bindView(View view, Context context, Cursor cursor) {
             PhotoViewHolder holder = (PhotoViewHolder) view.getTag();
 
-            int id = cursor.getInt(cursor.getColumnIndex(MediaStore.Images.Thumbnails._ID));
+            int id = cursor.getInt(cursor.getColumnIndex(MediaStore.Images.Media._ID));
             Uri imageURI = Uri.withAppendedPath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, Integer.toString(id));
             Picasso.with(context)
                     .load(imageURI)
                     .fit()
                     .centerCrop()
                     .into(holder.photo);
+
+
+            holder.checkbox.setImageResource(selectedPhotos.containsKey(id) ? R.drawable.checkbox_on : R.drawable.checkbox_off);
         }
     }
 
     private static final class PhotoViewHolder {
         ImageView photo;
         ImageView checkbox;
+    }
+
+    public class MultiChoiceModeListener implements GridView.MultiChoiceModeListener {
+
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            MenuInflater inflater = getMenuInflater();
+            inflater.inflate(R.menu.photo_selection_menu, menu);
+
+            int selectCount = gridView.getCheckedItemCount();
+            mode.setTitle("" + selectCount);
+
+            return true;
+        }
+
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return true;
+        }
+
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            if (item.getItemId() == R.id.item_done) {
+                Intent i = new Intent();
+                Photo[] photos = new Photo[selectedPhotos.size()];
+                selectedPhotos.values().toArray(photos);
+                i.putExtra(PhotoPicker.EXTRA_SELECTED_PHOTOS, photos);
+                setResult(Activity.RESULT_OK, i);
+                finish();
+            }
+
+            return true;
+        }
+
+        public void onDestroyActionMode(ActionMode mode) {
+            selectedPhotos.clear();
+            adapter.notifyDataSetChanged();
+        }
+
+        public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
+            int selectCount = gridView.getCheckedItemCount();
+            mode.setTitle("" + selectCount);
+
+            Cursor cursor = (Cursor) adapter.getItem(position);
+            int photoId = cursor.getInt(cursor.getColumnIndex(MediaStore.Images.Media._ID));
+            Uri imageURI = Uri.withAppendedPath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, Integer.toString(photoId));
+
+            if (checked) {
+                selectedPhotos.put(photoId, new Photo(imageURI, photoId));
+            } else {
+                selectedPhotos.remove(photoId);
+            }
+
+            adapter.notifyDataSetChanged();
+        }
+
     }
 
 }

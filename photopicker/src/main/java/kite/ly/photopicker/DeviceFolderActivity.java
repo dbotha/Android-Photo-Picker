@@ -41,6 +41,8 @@ public class DeviceFolderActivity extends Activity implements LoaderManager.Load
             MediaStore.Images.Media.DATE_TAKEN
     };
 
+    private static final int REQUEST_CODE_GET_PHOTOS = 99;
+
     private GridView gridView;
     private FolderCursorAdapter adapter;
 
@@ -63,9 +65,18 @@ public class DeviceFolderActivity extends Activity implements LoaderManager.Load
                 Intent i = new Intent(DeviceFolderActivity.this, GalleryActivity.class);
                 i.putExtra(GalleryActivity.EXTRA_MEDIA_BUCKET_ID, bucketId);
                 i.putExtra(GalleryActivity.EXTRA_MEDIA_BUCKET_NAME, folderName);
-                startActivity(i);
+                startActivityForResult(i, REQUEST_CODE_GET_PHOTOS);
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK) {
+            // bubble result up to calling/starting activity
+            setResult(resultCode, data);
+            finish();
+        }
     }
 
     @Override
