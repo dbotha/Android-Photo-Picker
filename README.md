@@ -4,8 +4,7 @@ A image picker providing a simple UI for a user to pick photos from their device
 
 ## Video Preview
 
-[![Preview](https://github.com/OceanLabs/InstagramPhotoPicker-Android/raw/master/screenshot.png)](https://vimeo.com/135676657)
-
+[![Preview](https://github.com/OceanLabs/InstagramPhotoPicker-Android/raw/master/screenshot.png)](https://vimeo.com/137073188)
 
 ## Requirements
 
