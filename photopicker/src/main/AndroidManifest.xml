@@ -1,7 +1,25 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="kite.ly.photopicker">
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="kite.ly.photopicker" >
 
-    <application android:allowBackup="true" android:label="@string/app_name">
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
+    <application
+        android:allowBackup="true"
+        android:label="@string/app_name" >
+        <activity
+            android:name=".DeviceFolderActivity"
+            android:label="@string/title_activity_device_folder"
+            android:theme="@style/Theme.PhotoPicker"
+            >
+        </activity>
+
+        <activity
+            android:name=".GalleryActivity"
+            android:label="@string/title_activity_gallery"
+            android:theme="@style/Theme.PhotoPicker"
+            >
+        </activity>
     </application>
 
 </manifest>

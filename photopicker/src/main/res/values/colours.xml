@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="translucent_status_bar">#fa999999</color>
+    <color name="opaque_status_bar">#ff999999</color>
+    <color name="translucent_action_bar">#f0f8f7f5</color>
+    <color name="opaque_action_bar">#fff8f7f5</color>
+</resources>

@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Photo Picker</string>
+    <string name="title_activity_device_folder">Device folders</string>
+    <string name="title_activity_gallery">Photos</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
 </resources>
