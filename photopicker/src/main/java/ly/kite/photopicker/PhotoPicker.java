@@ -1,6 +1,7 @@
 package ly.kite.photopicker;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.content.Intent;
 import android.os.Parcelable;
 
@@ -13,6 +14,11 @@ public class PhotoPicker {
     public static void startPhotoPickerForResult(Activity activity, int requestCode) {
         Intent i = new Intent(activity, DeviceFolderActivity.class);
         activity.startActivityForResult(i, requestCode);
+    }
+
+    public static void startPhotoPickerForResult(Fragment fragment, int requestCode) {
+        Intent i = new Intent(fragment.getActivity(), DeviceFolderActivity.class);
+        fragment.startActivityForResult(i, requestCode);
     }
 
     public static Photo[] getResultPhotos(Intent data) {
