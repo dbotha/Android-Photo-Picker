@@ -24,7 +24,7 @@ public class PhotoPicker {
     public static Photo[] getResultPhotos(Intent data) {
         Parcelable[] parcelables = data.getParcelableArrayExtra(PhotoPicker.EXTRA_SELECTED_PHOTOS);
         Photo[] photos = new Photo[parcelables.length];
-        System.arraycopy(photos, 0, photos, 0, parcelables.length);
+        System.arraycopy(parcelables, 0, photos, 0, parcelables.length);
         return photos;
     }
 }

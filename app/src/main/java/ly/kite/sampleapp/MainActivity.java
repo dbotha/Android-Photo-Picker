@@ -34,6 +34,9 @@ public class MainActivity extends Activity {
             if (resultCode == Activity.RESULT_OK) {
                 Photo[] photos = PhotoPicker.getResultPhotos(data);
                 Toast.makeText(this, "User selected " + photos.length + " photos", Toast.LENGTH_SHORT).show();
+                for (Photo photo : photos) {
+                    Log.i("dbotha", "URI: " + photo.getUri());
+                }
             } else if (resultCode == Activity.RESULT_CANCELED) {
                 Toast.makeText(this, "Photo Picking Cancelled", Toast.LENGTH_SHORT).show();
             } else {
