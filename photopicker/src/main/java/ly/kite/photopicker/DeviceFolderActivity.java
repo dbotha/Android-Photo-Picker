@@ -116,22 +116,22 @@ public class DeviceFolderActivity extends Activity implements LoaderManager.Load
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
         // Filter all returned media data to only contain distinct folders names
-        MatrixCursor distinctFolderCursor = new MatrixCursor(FOLDER_SUMMARY_PROJECTION); // Same projection used in loader
-        final HashSet<String> distinctFolders = new HashSet<>();
+        MatrixCursor distinctBucketCursor = new MatrixCursor(FOLDER_SUMMARY_PROJECTION); // Same projection used in loader
+        final HashSet<String> distinctBuckets = new HashSet<>();
 
         if (cursor.moveToFirst()) {
             do {
-                String folderName = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.BUCKET_DISPLAY_NAME));
-                if (!distinctFolders.contains(folderName)) {
-                    distinctFolders.add(folderName);
-                    distinctFolderCursor.addRow(new Object[] {cursor.getString(0), cursor.getString(1), cursor.getString(2), cursor.getInt(3)});
+                String bucketId = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.BUCKET_ID));
+                if (!distinctBuckets.contains(bucketId)) {
+                    distinctBuckets.add(bucketId);
+                    distinctBucketCursor.addRow(new Object[]{cursor.getString(0), cursor.getString(1), cursor.getString(2), cursor.getInt(3)});
                 }
             } while (cursor.moveToNext());
         }
 
         // Swap the new cursor in.  (The framework will take care of closing the
         // old cursor once we return.)
-        adapter.swapCursor(distinctFolderCursor);
+        adapter.swapCursor(distinctBucketCursor);
     }
 
     @Override
@@ -143,7 +143,8 @@ public class DeviceFolderActivity extends Activity implements LoaderManager.Load
 
     }
 
-    private final class FolderCursorAdapter extends CursorAdapter {
+    private
+    class FolderCursorAdapter extends CursorAdapter {
 
         public FolderCursorAdapter() {
             super(DeviceFolderActivity.this, null, false);
