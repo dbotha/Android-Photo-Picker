@@ -17,7 +17,7 @@ We publish builds of our library to the Maven central repository as an .aar file
 
 ```java
 dependencies {
-    compile 'ly.kite:photo-picker:1.+@aar'
+    compile 'ly.kite:photo-picker:1.+'
 }
 ```
 
